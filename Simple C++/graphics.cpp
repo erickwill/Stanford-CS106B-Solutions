@@ -21,7 +21,7 @@ struct Point {
     double Y;
 };
 
-Point first, second, third;
+Point firstVertex, secondVertex, thirdVertex;
 
 Point RandPoint();
 void CreateTriangle();
@@ -50,18 +50,21 @@ void CreateTriangle() {
         /* log points */
         if (count == 0) {
             MovePen(X, Y);
-            first.X = X;
-            first.Y = Y;
+            firstVertex.X = X;
+            firstVertex.Y = Y;
         } else if (count == 1) {
-            second.X = X;
-            second.Y = Y;
-            DrawLine(second.X - first.X, second.Y - first.Y);
+            secondVertex.X = X;
+            secondVertex.Y = Y;
+            DrawLine(secondVertex.X - firstVertex.X, 
+                secondVertex.Y - firstVertex.Y);
         } else {
-            third.X = X;
-            third.Y = Y;
-            DrawLine(third.X - second.X, third.Y - second.Y);
+            thirdVertex.X = X;
+            thirdVertex.Y = Y;
+            DrawLine(thirdVertex.X - secondVertex.X, 
+                thirdVertex.Y - secondVertex.Y);
             // close triangle
-            DrawLine(first.X - third.X, first.Y - third.Y);
+            DrawLine(firstVertex.X - thirdVertex.X, 
+                firstVertex.Y - thirdVertex.Y);
         }
         count++;
     }
@@ -69,8 +72,8 @@ void CreateTriangle() {
 
 /* Draws initial circle at random triangle point. */
 void SetFirstCircle() {
-    Point current = RandPoint();
-    MovePen(current.X, current.Y);
+    Point currentPoint = RandPoint();
+    MovePen(currentPoint.X, currentPoint.Y);
     StartFilledRegion(1);
     DrawArc(CIRCLE_SIZE, 0, 360);
     EndFilledRegion();
@@ -98,10 +101,10 @@ Point RandPoint() {
     int rand = RandomInteger(1,3);
     Point pt;
     if (rand == 1) {
-        pt = first;
+        pt = firstVertex;
     } else if (rand == 2) {
-        pt = second;
+        pt = secondVertex;
     } else
-        pt = third;
+        pt = thirdVertex;
     return pt;
 }
