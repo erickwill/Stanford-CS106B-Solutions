@@ -5,7 +5,7 @@
 #include "genlib.h"
 #include "simpio.h"
 #include "randomwriter.h"
-#include "maze.h"
+#include "mazerun.h"
 #include <iostream>
 
 int main ()
@@ -18,7 +18,9 @@ int main ()
         int choice = GetInteger();
         if (choice == 0) exit(0);
         else if (choice == 1)
-            RandWriter(); 
+            RandWriter();
+        else if (choice == 2)
+            MazeRun();
     }
     return 0;
 }

@@ -9,7 +9,6 @@
 
 void ParseInputText(ifstream &in);
 void CreateSeedMap(string &line);
-void PrintMap();
 string GetInitialSeed();
 void GenerateRandomText(string seed);
 
@@ -38,9 +37,10 @@ void RandWriter() {
     }
     ParseInputText(in);
     in.close();
-    // PrintMap();
     string seed = GetInitialSeed();
     GenerateRandomText(seed);
+    seedMap.clear();
+    seedsWithDupes.clear();
 }
 
 void ParseInputText(ifstream &in) {
@@ -68,20 +68,6 @@ void CreateSeedMap(string &line) {
                 seedMap.add(seedStr, nextCharacters);
             }
         }
-    }
-}
-
-void PrintMap() {
-    Map<Vector<char> >::Iterator itr = seedMap.iterator();
-    while (itr.hasNext()) {
-        string key = itr.next();
-        int len = key.length();
-        Vector<char> nextChars = seedMap.getValue(key);
-        cout << key << "--has the following characters: [";
-        for (int i = 0; i < nextChars.size(); i++) {
-            cout << nextChars[i] << ",";
-        }
-        cout << "]" << endl;        
     }
 }
 
@@ -127,6 +113,4 @@ void GenerateRandomText(string seed) {
         seed += c;
     }
     cout << endl << endl;
-    seedMap.clear();
-    seedsWithDupes.clear();
 }
