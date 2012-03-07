@@ -148,7 +148,7 @@ void DrawPath(Stack<pointT> &path, Maze &maze) {
     while(!path.isEmpty()) {
         finalPath.add(path.pop());
     }
-    for (int i = 0; i < finalPath.size(); i++) {
+    for (int i = finalPath.size()-1; i >= 0 ; i--) {
         maze.drawMark(finalPath[i], "blue");
         UpdateDisplay();
     }
