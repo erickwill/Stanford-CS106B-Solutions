@@ -75,25 +75,37 @@ void InitMaze(Maze &maze) {
 
 /* Returns a random neighbor cell. */
 pointT GetNeighborCell(pointT &pt, Maze &maze) {
-    pointT neighbor = pt;
-    int rand = RandomInteger(1,4);
-    switch(rand) {
-        case 1: 
-            neighbor.col++;
-            break;
-        case 2: 
-            neighbor.col--;
-            break;
-        case 3: 
-            neighbor.row--;
-            break;
-        default: 
-            neighbor.row++;
+    Vector<pointT> neighbors; // possible neighbor cells
+
+    // check for valid neighbor and add to vector
+    for (int i = 0; i < 4; i++) {
+        pointT neighborPt = pt;
+        switch(i) {
+            case 0: 
+                neighborPt.col++;
+                if (neighborPt.col <= TOTAL_COLUMNS-1)
+                neighbors.add(neighborPt);
+                break;
+            case 1: 
+                neighborPt.col--;
+                if (neighborPt.col >= 0)
+                neighbors.add(neighborPt);
+                break;
+            case 2: 
+                neighborPt.row--;
+                if (neighborPt.row >= 0)
+                neighbors.add(neighborPt);
+                break;
+            default: 
+                neighborPt.row++;
+                if (neighborPt.row <= TOTAL_ROWS-1)
+                neighbors.add(neighborPt);
+        }
     }
-    if (!maze.pointInBounds(neighbor))
-        GetNeighborCell(pt, maze); 
-    else
-        return neighbor;
+    // select random neighbor
+    int size = neighbors.size();
+    int rand = RandomInteger(0,size-1);
+    return neighbors[rand];
 }
 
 /* Solves the maze using breadth-first search. */
