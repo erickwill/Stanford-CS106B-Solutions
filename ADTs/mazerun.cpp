@@ -21,11 +21,15 @@ void GetMorePaths(Maze &maze);
 bool ptAllowed(Vector<pointT> &usedPts, pointT &neighbor);
 void DrawPath(Stack<pointT> &path, Maze &maze);
 
-Stack<pointT> path;    
-Vector<pointT> usedPts;
-Queue<Stack<pointT> > pathCollection;        
+Stack<pointT> path;    // possible solution path
+Vector<pointT> usedPts; // tested solution points
+Queue<Stack<pointT> > pathCollection; // possible solution paths
 
-
+/*
+* Main maze method. Initializes a grid of cells. Uses Aldous-Broder
+* to create a perfect maze. Solves the maze using 
+* breadth-first search and draws the solution.
+*/
 void MazeRun() {
     Randomize();
     InitGraphics();
@@ -36,18 +40,24 @@ void MazeRun() {
     GetLine();
     cout << endl;
     SolveMaze(maze);
+
+    // clear containers for next use
     path.clear();
     pathCollection.clear();
     usedPts.clear();
 }
 
+/* 
+* Initializes grid and creates a perfect maze using 
+* Aldous-Broder algorithm.
+*/
 void InitMaze(Maze &maze) {
     cout << endl << "Building Maze..." << endl;
-    pointT pt;
+    pointT pt; // initial random point
     pt.row = RandomInteger(0, TOTAL_ROWS-1);
     pt.col = RandomInteger(0, TOTAL_COLUMNS-1);
 
-    Grid<bool> excluded(TOTAL_ROWS, TOTAL_COLUMNS);
+    Grid<bool> excluded(TOTAL_ROWS, TOTAL_COLUMNS); // keep track of included cells
     excluded(pt.row, pt.col) = false; // included
     int includedCount = 0;
 
@@ -63,6 +73,7 @@ void InitMaze(Maze &maze) {
     }
 }
 
+/* Returns a random neighbor cell. */
 pointT GetNeighborCell(pointT &pt, Maze &maze) {
     pointT neighbor = pt;
     int rand = RandomInteger(1,4);
@@ -80,11 +91,12 @@ pointT GetNeighborCell(pointT &pt, Maze &maze) {
             neighbor.row++;
     }
     if (!maze.pointInBounds(neighbor))
-        GetNeighborCell(pt, maze);
+        GetNeighborCell(pt, maze); 
     else
         return neighbor;
 }
 
+/* Solves the maze using breadth-first search. */
 void SolveMaze(Maze &maze) {
     pointT startPt, finishPt;
     startPt.row = 0;
@@ -96,6 +108,7 @@ void SolveMaze(Maze &maze) {
     usedPts.add(startPt);
     pathCollection.enqueue(path);
 
+    // BFS
     while(!pathCollection.isEmpty()) {
         path = pathCollection.dequeue();
         pointT pt = path.peek();
@@ -108,6 +121,10 @@ void SolveMaze(Maze &maze) {
     }
 }
 
+/* 
+* Adds more paths to queue by adding valid neighbor
+* cells to the existing path.
+*/
 void GetMorePaths(Maze &maze) {
     pointT pt = path.peek();
     for (int i = 0; i < 4; i++) {
@@ -135,6 +152,7 @@ void GetMorePaths(Maze &maze) {
     }
 }
 
+/* Checks if point has been tested to avoid circular paths. */
 bool ptAllowed(Vector<pointT> &usedPts, pointT &neighbor) {
     for (int i = 0; i < usedPts.size(); i++) {
         if (usedPts[i].row == neighbor.row && usedPts[i].col == neighbor.col)
@@ -143,6 +161,7 @@ bool ptAllowed(Vector<pointT> &usedPts, pointT &neighbor) {
     return true;
 }
 
+/* Draws the solution from start to finish. */
 void DrawPath(Stack<pointT> &path, Maze &maze) {
     Vector<pointT> finalPath;
     while(!path.isEmpty()) {
