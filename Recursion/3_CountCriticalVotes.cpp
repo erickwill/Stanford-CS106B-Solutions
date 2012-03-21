@@ -33,19 +33,19 @@ int main ()
 
 int CountCriticalVotes(Vector<int> & blocks, int blockIndex)
 {
-  int vote = blocks[blockIndex];
-  blocks.removeAt(blockIndex);
-  int count = 0;
-  int index = 0;
-  int sum = 0;
-  
-  int totalVotes = 0;
-  for (int i = 0; i < blocks.size(); i++) 
-  {
-    totalVotes += blocks[i];
-  }
+    int vote = blocks[blockIndex];
+    blocks.removeAt(blockIndex);
+    int count = 0;
+    int index = 0;
+    int sum = 0;
+      
+    int totalVotes = 0;
+    for (int i = 0; i < blocks.size(); i++) 
+    {
+      totalVotes += blocks[i];
+    }
 
-  return RecVote(blocks, index, sum, count, vote, totalVotes);
+    return RecVote(blocks, index, sum, count, vote, totalVotes);
 }
 
 int RecVote(Vector<int> &blocks, int index, 
