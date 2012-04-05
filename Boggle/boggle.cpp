@@ -393,7 +393,7 @@ bool BoardHasWord(Grid<string> board, string &word)
 * Process user word. Determine if the word is valid, search
 * the board and update graphics.
 */
-void ParseGuess(int &score, Grid<string> &board, string word, 
+void ParseGuess(Grid<string> &board, string word, 
                 Vector<string> &guesses, Lexicon &lex)
 {
     playerT player = Human;
@@ -410,7 +410,6 @@ void ParseGuess(int &score, Grid<string> &board, string word,
     // word found
     if (BoardHasWord(board,word))
     {
-        score += word.length() - POINTS_OFFSET; // add to score
         guesses.add(word); // log guess
         RecordWordForPlayer(word, player); // update graphics
     }
@@ -423,9 +422,8 @@ void ParseGuess(int &score, Grid<string> &board, string word,
 /*
 * Get user guess words.
 */
-int PlayerTurn(Grid<string> &board, Lexicon &lex)
+Vector<string> PlayerTurn(Grid<string> &board, Lexicon &lex)
 {
-    int score = 0;
     Vector<string> guesses;
     string word;
     while(true)
@@ -434,16 +432,15 @@ int PlayerTurn(Grid<string> &board, Lexicon &lex)
         word = GetLine();
         word = ConvertToUpperCase(word);
         if (word == "") break;
-        ParseGuess(score, board, word, guesses, lex);
+        ParseGuess(board, word, guesses, lex);
     }    
-    return score;
+    return guesses;
 }
 
 /*
-* If the word has not been found already, update score 
-* and board graphics.
+* If the word has not been found already, update board graphics.
 */
-void ParseCompWord(string &word, int &score, Vector<string> &foundWords)
+void ParseCompWord(string &word, Vector<string> &foundWords)
 {
     // check if word already found
     for (int i = 0; i < foundWords.size(); i++)
@@ -455,7 +452,6 @@ void ParseCompWord(string &word, int &score, Vector<string> &foundWords)
     foundWords.add(word);
     playerT comp = Computer;
     RecordWordForPlayer(word,comp);
-    score += word.length() - POINTS_OFFSET;
 }
 
 /*
@@ -463,7 +459,7 @@ void ParseCompWord(string &word, int &score, Vector<string> &foundWords)
 * on the game board.
 */
 void FindCompWords(Grid<string> &board, Lexicon &lex, int row, int col, 
-                   string soFar, int &score, Vector<string> &foundWords)
+                   string soFar, Vector<string> &foundWords)
 {    
     string letter = board.getAt(row,col); // cube letter
     string orig = board.getAt(row,col); // original cube string
@@ -472,7 +468,7 @@ void FindCompWords(Grid<string> &board, Lexicon &lex, int row, int col,
     // word found
     if (current.length() >= MIN_WORD_LENGTH && lex.containsWord(current))
     {
-        ParseCompWord(current,score,foundWords);    
+        ParseCompWord(current,foundWords);    
         return;
     }
 
@@ -494,7 +490,7 @@ void FindCompWords(Grid<string> &board, Lexicon &lex, int row, int col,
                 !(horiz == 0 && vert == 0))
             {
                 board.setAt(row,col,"~"); // used cube
-                FindCompWords(board,lex,row+vert,col+horiz,current,score,foundWords);
+                FindCompWords(board,lex,row+vert,col+horiz,current,foundWords);
                 board.setAt(row,col,orig); // reset cube for different letter arrangement
             }
         }
@@ -504,10 +500,8 @@ void FindCompWords(Grid<string> &board, Lexicon &lex, int row, int col,
 /*
 * Searches for all valid words on game board.
 */
-int ComputerTurn(Grid<string> &board, Lexicon &lex)
+void ComputerTurn(Grid<string> &board, Lexicon &lex, Vector<string> &foundWords)
 {
-    int score = 0;
-    Vector<string> foundWords;
     int boardSize = board.numRows();
 
     for (int row = 0; row < boardSize; row++)
@@ -515,10 +509,9 @@ int ComputerTurn(Grid<string> &board, Lexicon &lex)
         for (int col = 0; col < boardSize; col++)
         {
             string soFar;
-            FindCompWords(board,lex,row,col,soFar,score,foundWords);
+            FindCompWords(board,lex,row,col,soFar,foundWords);
         }
     }
-    return score;
 }
 
 /*
@@ -527,8 +520,8 @@ int ComputerTurn(Grid<string> &board, Lexicon &lex)
 void StartGame(Lexicon &lex)
 {
     Grid<string> board = BoardSetup();
-    int playerScore = PlayerTurn(board,lex);
-    int compScore = ComputerTurn(board,lex);
+    Vector<string> foundWords = PlayerTurn(board,lex);
+    ComputerTurn(board,lex,foundWords);
 }
 
 /*
