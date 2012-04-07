@@ -20,7 +20,6 @@ struct pointT
 };
 
 const int MIN_WORD_LENGTH = 4;
-const int POINTS_OFFSET = 3;
 const int SMALL_BOARD_SIZE = 4;
 const int BIG_BOARD_SIZE = 5;
 
