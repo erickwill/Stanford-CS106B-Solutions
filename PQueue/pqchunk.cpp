@@ -64,7 +64,17 @@ void PQueue::enqueue(int newValue)
                 {
                     shiftAdd(cur,newValue);
                     return;
-                } 
+                }
+                // create a new Cell at the head and insert value
+                else if (i == 0 && prev == NULL)
+                {
+                    newChunk->values = new int[MaxElemsPerBlock];
+                    newChunk->values[0] = newValue;
+                    newChunk->BlocksInUse = 1;
+                    newChunk->next = cur;
+                    head = newChunk;
+                    return;
+                }
                 // put in previous cell if there is room
                 else if (i == 0 && prev != NULL && prev->BlocksInUse < MaxElemsPerBlock)
                 {
@@ -81,13 +91,13 @@ void PQueue::enqueue(int newValue)
         }
     }
 
-    // insert in last cell
+    // insert in last Cell
     if (prev->BlocksInUse < MaxElemsPerBlock)
     {
         prev->values[prev->BlocksInUse] = newValue;
         prev->BlocksInUse++;
     }
-    // create new cell and add value
+    // create new Cell at the end of the list and add value
     else
     {
         newChunk->values = new int[MaxElemsPerBlock];
