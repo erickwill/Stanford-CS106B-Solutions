@@ -3,7 +3,6 @@
  * --------------
  * Defines the interface for the priority queue class. 
  * 
- * Julie Zelenski, CS106, Fall 2007
  */
  
  
@@ -131,9 +130,6 @@ class PQueue
     // It's fine is to disallow copying for all implementations as
     // a precaution
     DISALLOW_COPYING(PQueue)
-
-      /* This is the representation for the unsorted vector.
-       * You will need to update this as you change representations. */
     Vector<int> entries;
     void swap(int indexA, int indexB);
 
