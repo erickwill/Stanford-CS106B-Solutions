@@ -120,6 +120,7 @@ class PQueue
      */
     void print();
 
+
   private:
     struct Cell {
         int *values;
@@ -128,7 +129,7 @@ class PQueue
     };
     Cell *head;
     DISALLOW_COPYING(PQueue)
-    void initPQueue(int newValue);
+    PQueue::Cell *initCell(int newValue, Cell *nextCell);
     void shiftAdd(Cell *cell, int newValue);
     void splitAdd(Cell *cur, int newValue);
 };

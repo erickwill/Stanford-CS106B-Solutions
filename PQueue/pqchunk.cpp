@@ -48,7 +48,8 @@ void PQueue::enqueue(int newValue)
 {
     if (head == NULL)
     {
-        initPQueue(newValue); // first value enqueued
+        Cell *newChunk = initCell(newValue, NULL);
+        head = newChunk;
         return;
     }
     
@@ -68,10 +69,7 @@ void PQueue::enqueue(int newValue)
                 // create a new Cell at the head and insert value
                 else if (i == 0 && prev == NULL)
                 {
-                    newChunk->values = new int[MaxElemsPerBlock];
-                    newChunk->values[0] = newValue;
-                    newChunk->BlocksInUse = 1;
-                    newChunk->next = cur;
+                    Cell *newChunk = initCell(newValue, cur);
                     head = newChunk;
                     return;
                 }
@@ -91,7 +89,7 @@ void PQueue::enqueue(int newValue)
         }
     }
 
-    // insert in last Cell
+    // insert in last Cell if there is room
     if (prev->BlocksInUse < MaxElemsPerBlock)
     {
         prev->values[prev->BlocksInUse] = newValue;
@@ -100,10 +98,7 @@ void PQueue::enqueue(int newValue)
     // create new Cell at the end of the list and add value
     else
     {
-        newChunk->values = new int[MaxElemsPerBlock];
-        newChunk->values[0] = newValue;
-        newChunk->BlocksInUse = 1;
-        newChunk->next = NULL;
+        Cell *newChunk = initCell(newValue, NULL);
         prev->next = newChunk;
     }
 }
@@ -120,10 +115,12 @@ void PQueue::shiftAdd(Cell *cell, int newValue)
         if (newValue > cell->values[index])
             break;
     }
+
     for (int i = MaxElemsPerBlock; i >= index; i--)
     {
         cell->values[i] = cell->values[i-1]; // shift values
     }
+
     cell->values[index] = newValue; // insert
     cell->BlocksInUse++;
 }
@@ -138,7 +135,7 @@ void PQueue::splitAdd(Cell *cur, int newValue)
     newChunk->values = new int[MaxElemsPerBlock];
     for (int i = MaxElemsPerBlock/2; i < MaxElemsPerBlock; i++)
     {
-        newChunk->values[i-(MaxElemsPerBlock/2)] = cur->values[i];
+        newChunk->values[i-(MaxElemsPerBlock/2)] = cur->values[i]; // copy half of the old values into new Cell
     }
     newChunk->BlocksInUse = MaxElemsPerBlock/2;
     cur->BlocksInUse = MaxElemsPerBlock/2;
@@ -169,16 +166,17 @@ void PQueue::splitAdd(Cell *cur, int newValue)
 }
 
 /*
-* Initializes first Cell and enqueues first value.
+* Creates a new Cell and returns a pointer. Must pass a NULL pointer if the cell will be
+* placed at the end of the list.
 */
-void PQueue::initPQueue(int newValue)
+PQueue::Cell *PQueue::initCell(int newValue, Cell *nextCell)
 {
     Cell *newChunk = new Cell;
     newChunk->values = new int[MaxElemsPerBlock];
     newChunk->values[0] = newValue;
     newChunk->BlocksInUse = 1;
-    newChunk->next = NULL;
-    head = newChunk;
+    newChunk->next = nextCell;
+    return newChunk;
 }
 
 /*
@@ -191,6 +189,7 @@ int PQueue::dequeueMax()
 
     int num = head->values[0]; // value to return
 
+    // shift remaining values
     if (head->BlocksInUse > 1)
     {
         for (int i = 0; i < head->BlocksInUse-1; i++)
@@ -201,6 +200,7 @@ int PQueue::dequeueMax()
 
     head->BlocksInUse--;
 
+    // if no remaining values, delete/remove Cell
     if (head->BlocksInUse == 0)
     {
          Cell *toBeDeleted = head;
