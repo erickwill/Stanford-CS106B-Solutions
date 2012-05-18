@@ -11,7 +11,8 @@ PQueue::PQueue()
 
 PQueue::~PQueue()
 {
-    while (head != NULL) {
+    while (head != NULL) 
+    {
         Cell *next = head->next;
         delete head;
         head = next;
@@ -137,6 +138,7 @@ void PQueue::splitAdd(Cell *cur, int newValue)
     {
         newChunk->values[i-(MaxElemsPerBlock/2)] = cur->values[i]; // copy half of the old values into new Cell
     }
+    
     newChunk->BlocksInUse = MaxElemsPerBlock/2;
     cur->BlocksInUse = MaxElemsPerBlock/2;
     
