@@ -21,14 +21,16 @@ PQueue::PQueue()
     entries.add(0);
 }
 
-
 PQueue::~PQueue()
 {
 }
 
+/*
+* For debugging purposes. Prints all values, 
+* including initial blank value.
+*/
 void PQueue::print()
 {
-    // start at 1 to account for empty first entry
     for (int i = 0; i < entries.size(); i++)
     {
         cout << entries[i] << " ";
@@ -119,7 +121,6 @@ int PQueue::bytesUsed()
     return sizeof(*this) + entries.bytesUsed();
 }
 
-
 string PQueue::implementationName()
 {
     return "heap";
@@ -134,4 +135,3 @@ void PQueue::printDebuggingInfo()
     cout << endl;
     cout << "------------------ END DEBUG INFO ------------------" << endl;
 }
-
