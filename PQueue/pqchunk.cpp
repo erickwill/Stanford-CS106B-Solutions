@@ -14,6 +14,7 @@ PQueue::~PQueue()
     while (head != NULL) 
     {
         Cell *next = head->next;
+        delete[] head->values;
         delete head;
         head = next;
     }
@@ -205,8 +206,9 @@ int PQueue::dequeueMax()
     // if no remaining values, delete/remove Cell
     if (head->BlocksInUse == 0)
     {
-         Cell *toBeDeleted = head;
-         head = head->next;     // splice head cell out
+        Cell *toBeDeleted = head;
+        head = head->next;     // splice head cell out
+        delete[] toBeDeleted->values; 
         delete toBeDeleted;
     }
 
