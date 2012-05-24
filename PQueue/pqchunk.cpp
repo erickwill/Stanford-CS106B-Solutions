@@ -139,9 +139,18 @@ void PQueue::splitAdd(Cell *cur, int newValue)
     {
         newChunk->values[i-(MaxElemsPerBlock/2)] = cur->values[i]; // copy half of the old values into new Cell
     }
-    
-    newChunk->BlocksInUse = MaxElemsPerBlock/2;
-    cur->BlocksInUse = MaxElemsPerBlock/2;
+
+    // update blocks in use; check for odd MaxElemsPerBlock
+    if (MaxElemsPerBlock % 2 == 0)
+    {
+        newChunk->BlocksInUse = MaxElemsPerBlock/2;
+        cur->BlocksInUse = MaxElemsPerBlock/2;
+    }
+    else
+    {
+        newChunk->BlocksInUse = (MaxElemsPerBlock/2)+1;
+        cur->BlocksInUse = (MaxElemsPerBlock/2)+1;        
+    }
     
     // insert into list
     newChunk->next = cur->next;
