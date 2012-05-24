@@ -118,7 +118,7 @@ void PQueue::shiftAdd(Cell *cell, int newValue)
             break;
     }
 
-    for (int i = MaxElemsPerBlock; i >= index; i--)
+    for (int i = MaxElemsPerBlock-1; i >= index; i--)
     {
         cell->values[i] = cell->values[i-1]; // shift values
     }
