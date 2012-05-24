@@ -1,34 +1,23 @@
 /*
- * File: pqvector.cpp
+ * File: pqheap.cpp
  * ------------------
- *
  */
  
 #include "pqheap.h"
 #include "genlib.h"
 #include <iostream>
 
-/* Implementation notes: PQueue class
- * ----------------------------------
- * The private section for the pqvector looks like this:
- *
- *    Vector<int> entries;
- */
-
-
 PQueue::PQueue()
 {
+    // first value blank for easier sorting
     entries.add(0);
 }
+
 
 PQueue::~PQueue()
 {
 }
 
-/*
-* For debugging purposes. Prints all values, 
-* including initial blank value.
-*/
 void PQueue::print()
 {
     for (int i = 0; i < entries.size(); i++)
@@ -120,6 +109,7 @@ int PQueue::bytesUsed()
 {
     return sizeof(*this) + entries.bytesUsed();
 }
+
 
 string PQueue::implementationName()
 {

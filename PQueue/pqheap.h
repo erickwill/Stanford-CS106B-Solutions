@@ -3,6 +3,7 @@
  * --------------
  * Defines the interface for the priority queue class. 
  * 
+ * Julie Zelenski, CS106, Fall 2007
  */
  
  
@@ -11,7 +12,6 @@
 
 #include "genlib.h"
 #include "vector.h"
-#include "disallowcopy.h"
 
 /*
  * Class: PQueue
@@ -120,20 +120,18 @@ class PQueue
      * doing development.
      */
     void printDebuggingInfo();
+    
+    /*
+     * Member function: print
+     * Usage: pq.print()
+     * -------------------------------
+     * Prints all values in the vector, including the empty first value.
+     */
     void print();
 
   private:
-  
-    // If implemented using Vector data mamber, default memberwise copy 
-    // works fine, but if implemented as linked list, (ie pointer data member)
-    // copying would create unintended sharing.
-    // It's fine is to disallow copying for all implementations as
-    // a precaution
-    DISALLOW_COPYING(PQueue)
     Vector<int> entries;
     void swap(int indexA, int indexB);
-
 };
-
 
 #endif
