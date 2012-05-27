@@ -1,0 +1,13 @@
+USA.bmp
+NODES
+WashingtonDC 5.71 2.25
+Minneapolis 3.76 2.93
+SanFrancisco 0.278 2.31
+Dallas 3.31 1.04
+ARCS
+Minneapolis SanFrancisco 1777
+Minneapolis Dallas 935
+Minneapolis WashingtonDC 1600
+SanFrancisco WashingtonDC 2200
+Dallas SanFrancisco 1540 
+Dallas WashingtonDC 1319
