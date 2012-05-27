@@ -196,17 +196,15 @@ void drawArcs(Graph &graph)
 
 void drawArcs(Set<arcT *> &arcs)
 {
-    //Set<arcT *> drawnArcs(arcCmp);
+    double cost = 0;
     Set<arcT *>::Iterator itrArc = arcs.iterator();
     while(itrArc.hasNext())
     {
         arcT *arc = itrArc.next();
-    //    if (!drawnArcs.contains(arc))
-    //    {
-            DrawLineBetween(arc->start->xy,arc->finish->xy, "red");
-    //    }
-    //    drawnArcs.add(arc);
+        DrawLineBetween(arc->start->xy,arc->finish->xy, "red");
+        cost += arc->cost;
     }
+    cout << "Total Cost: " << cost << endl;
 }
 
 
@@ -257,7 +255,7 @@ Vector<arcT *> FindShortestPath(nodeT *start, nodeT *finish)
         count++;
         start = path[path.size() - 1]->finish;
     }
-    cout << "Paths Checked = " << count << endl;
+    cout << "Dequeued paths = " << count << endl;
     return path;
 }
 
@@ -347,6 +345,7 @@ int arcCostCmp(arcT *a, arcT *b)
 */
 Set<arcT *> kruskal(Graph &graph)
 {
+    cout << endl << "Calculating minimum spanning tree..." << endl;
     PQueue<arcT *> path(arcCostCmp);
     Vector< Set<string> > nodes;
     Set<arcT *> minTree;
@@ -441,6 +440,8 @@ int main()
                 drawCities(graph);
                 minTree = kruskal(graph);
                 drawArcs(minTree);
+                cout << "Press Enter to continue...";
+                GetLine();
                 break;
             case 4:
                 exit(0);
