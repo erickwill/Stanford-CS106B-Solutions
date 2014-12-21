@@ -48,9 +48,11 @@ void PermuteVector(Vector<int> prefix, Vector<int> rest,
     }
     else {
         for (int i = 0; i < rest.size(); i++) {
-            prefix.add(rest[i]);
-            rest.removeAt(i);
-            PermuteVector(prefix, rest, stockLength, totalPipes);
+            Vector<int> tempPrefix = prefix; //Newly added line
+            tempPrefix.add(rest[i]);
+            Vector<int> tempRest = rest; //Newly added line
+            tempRest.removeAt(i);
+            PermuteVector(tempPrefix, tempRest, stockLength, totalPipes);
         }
     }
 }
